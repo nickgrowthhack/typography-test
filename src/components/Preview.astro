@@ -1,0 +1,26 @@
+---
+import { SAMPLES } from "~/config/typography";
+
+// Cada bloco compartilha as mesmas variáveis CSS (--ls/--fz/--fw/--lh) definidas
+// no .stage, então um único controle reflete em todos os contextos ao mesmo tempo.
+// O texto é editável (contenteditable) para testar com conteúdo real.
+---
+
+{
+  SAMPLES.map((sample) => (
+    <article class={`sample sample--${sample.kind}`}>
+      <span class="sample__label">{sample.label}</span>
+      <div
+        class="sample__text"
+        data-sample={sample.id}
+        contenteditable="true"
+        spellcheck="false"
+        role="textbox"
+        aria-multiline="true"
+        aria-label={`Exemplo editável: ${sample.label}`}
+      >
+        {sample.text}
+      </div>
+    </article>
+  ))
+}

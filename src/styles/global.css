@@ -1,0 +1,367 @@
+/*
+ * Estilos globais em cascade layers para ordem de especificidade previsível.
+ * As variáveis --ls/--fz/--fw/--lh são escritas pelo playground (JS) no .stage,
+ * mantendo o CSS reativo e o JS mínimo.
+ */
+@layer reset, tokens, base, layout, components, utilities;
+
+/* ---------------------------------------------------------------- reset --- */
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  input,
+  button,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  :where(a) {
+    color: inherit;
+  }
+}
+
+/* --------------------------------------------------------------- tokens --- */
+@layer tokens {
+  :root {
+    --font-mono: "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+
+    --radius: 0.5rem;
+    --radius-sm: 0.375rem;
+
+    --border-width: 1px;
+    --transition: 150ms ease;
+  }
+
+  /* Tema escuro (padrão) */
+  :root,
+  [data-theme="dark"] {
+    color-scheme: dark;
+    --bg: oklch(0.18 0.01 260);
+    --surface: oklch(0.22 0.012 260);
+    --surface-hover: oklch(0.26 0.014 260);
+    --border: oklch(0.32 0.015 260);
+    --text: oklch(0.95 0.005 260);
+    --text-muted: oklch(0.72 0.01 260);
+    --accent: oklch(0.72 0.16 250);
+    --accent-contrast: oklch(0.18 0.01 260);
+  }
+
+  [data-theme="light"] {
+    color-scheme: light;
+    --bg: oklch(0.98 0.003 260);
+    --surface: oklch(1 0 0);
+    --surface-hover: oklch(0.96 0.004 260);
+    --border: oklch(0.89 0.006 260);
+    --text: oklch(0.22 0.01 260);
+    --text-muted: oklch(0.5 0.012 260);
+    --accent: oklch(0.55 0.18 255);
+    --accent-contrast: oklch(0.99 0 0);
+  }
+}
+
+/* ----------------------------------------------------------------- base --- */
+@layer base {
+  body {
+    font-family: var(--font-mono);
+    background: var(--bg);
+    color: var(--text);
+    transition:
+      background var(--transition),
+      color var(--transition);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      /* biome-ignore lint/complexity/noImportantStyles: o reset de acessibilidade no seletor universal precisa vencer regras de componente mais específicas */
+      transition-duration: 0.01ms !important;
+      /* biome-ignore lint/complexity/noImportantStyles: idem acima */
+      animation-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------- layout --- */
+@layer layout {
+  .app {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    min-height: 100dvh;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    padding: var(--space-3) var(--space-5);
+    border-bottom: var(--border-width) solid var(--border);
+    background: var(--surface);
+    flex-wrap: wrap;
+  }
+
+  .workspace {
+    display: grid;
+    grid-template-columns: minmax(280px, 340px) 1fr;
+    gap: 0;
+    min-height: 0;
+  }
+
+  @media (max-width: 760px) {
+    .workspace {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .sidebar {
+    padding: var(--space-5);
+    border-right: var(--border-width) solid var(--border);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+  }
+
+  @media (max-width: 760px) {
+    .sidebar {
+      border-right: none;
+      border-bottom: var(--border-width) solid var(--border);
+    }
+  }
+
+  .stage {
+    padding: var(--space-6) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    overflow-x: auto;
+  }
+}
+
+/* ----------------------------------------------------------- components --- */
+@layer components {
+  .brand {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-3);
+  }
+
+  .brand__title {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .brand__subtitle {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  .actions {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: var(--space-2) var(--space-3);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+    color: var(--text);
+    font-size: 0.8rem;
+    transition:
+      background var(--transition),
+      border-color var(--transition);
+  }
+
+  .btn:hover {
+    background: var(--surface-hover);
+  }
+
+  .btn--accent {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 600;
+  }
+
+  .btn--accent:hover {
+    background: var(--accent);
+    filter: brightness(1.08);
+  }
+
+  /* --- controles --- */
+  .control {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .control__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+  }
+
+  .control__label {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .control__value {
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+
+  .control input[type="range"] {
+    width: 100%;
+    accent-color: var(--accent);
+  }
+
+  .control__sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .segmented {
+    display: inline-flex;
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+  }
+
+  .segmented button {
+    padding: var(--space-1) var(--space-3);
+    background: var(--surface);
+    border: none;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+  }
+
+  .segmented button[aria-pressed="true"] {
+    background: var(--accent);
+    color: var(--accent-contrast);
+    font-weight: 600;
+  }
+
+  /* --- saída CSS copiável --- */
+  .output {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .output__code {
+    padding: var(--space-3);
+    border: var(--border-width) solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    font-size: 0.8rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    overflow-x: auto;
+  }
+
+  /* --- blocos de preview --- */
+  .sample {
+    display: grid;
+    gap: var(--space-2);
+    padding-bottom: var(--space-5);
+    border-bottom: var(--border-width) dashed var(--border);
+  }
+
+  .sample:last-child {
+    border-bottom: none;
+  }
+
+  .sample__label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  /* O texto-alvo: herda as variáveis controladas pelo usuário. */
+  .sample__text {
+    font-family: var(--font-mono);
+    font-size: var(--fz, 18px);
+    font-weight: var(--fw, 400);
+    line-height: var(--lh, 1.5);
+    letter-spacing: var(--ls, 0);
+    font-variation-settings: "wght" var(--fw, 400);
+  }
+
+  .sample--display .sample__text {
+    font-size: calc(var(--fz, 18px) * 3);
+    line-height: 1.05;
+  }
+
+  .sample--heading .sample__text {
+    font-size: calc(var(--fz, 18px) * 1.6);
+  }
+
+  .sample--caps .sample__text {
+    text-transform: uppercase;
+  }
+
+  .sample--numeric .sample__text {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .sample__text[contenteditable="true"]:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+}
+
+/* ------------------------------------------------------------ utilities --- */
+@layer utilities {
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}

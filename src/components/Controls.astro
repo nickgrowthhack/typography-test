@@ -1,0 +1,58 @@
+---
+import { CONTROLS } from "~/config/typography";
+
+// Controles numéricos simples renderizados a partir da config (fonte de verdade).
+const numericControls = [CONTROLS.fontSize, CONTROLS.fontWeight, CONTROLS.lineHeight];
+const ls = CONTROLS.letterSpacingEm;
+---
+
+<div class="control">
+  <div class="control__head">
+    <label class="control__label" for="letterSpacing">Letter-spacing</label>
+    <span class="control__value" id="letterSpacing-value">0</span>
+  </div>
+  <input
+    type="range"
+    id="letterSpacing"
+    name="letterSpacing"
+    min={ls.min}
+    max={ls.max}
+    step={ls.step}
+    value={ls.default}
+  />
+  <div class="control__head">
+    <span class="control__sub">Unidade</span>
+    <div class="segmented" role="group" aria-label="Unidade do letter-spacing">
+      <button type="button" id="unit-em" data-unit="em" aria-pressed="true">em</button>
+      <button type="button" id="unit-px" data-unit="px" aria-pressed="false">px</button>
+    </div>
+  </div>
+  <p class="control__sub">Dica: prefira <strong>em</strong> — escala junto com o tamanho da fonte.</p>
+</div>
+
+{
+  numericControls.map((c) => (
+    <div class="control">
+      <div class="control__head">
+        <label class="control__label" for={c.id}>
+          {c.label}
+        </label>
+        <span class="control__value" id={`${c.id}-value`} />
+      </div>
+      <input
+        type="range"
+        id={c.id}
+        name={c.id}
+        min={c.min}
+        max={c.max}
+        step={c.step}
+        value={c.default}
+      />
+    </div>
+  ))
+}
+
+<div class="output">
+  <span class="control__label">CSS gerado</span>
+  <pre class="output__code" id="output" aria-live="polite"></pre>
+</div>

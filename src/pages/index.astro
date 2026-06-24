@@ -1,0 +1,59 @@
+---
+import "@fontsource-variable/geist-mono";
+import "~/styles/global.css";
+import Controls from "~/components/Controls.astro";
+import Preview from "~/components/Preview.astro";
+import { DEFAULT_SETTINGS, FONT } from "~/config/typography";
+---
+
+<!doctype html>
+<html lang="pt-BR" data-theme={DEFAULT_SETTINGS.theme}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta
+      name="description"
+      content="Playground para definir o letter-spacing ideal da Geist Mono."
+    />
+    <title>Letter-spacing · {FONT.label}</title>
+    {/* Aplica o tema da URL antes do paint para evitar flash de tema errado. */}
+    <script is:inline>
+      try {
+        const t = new URLSearchParams(location.search).get("t");
+        if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+      } catch (_) {}
+    </script>
+  </head>
+  <body>
+    <div class="app">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand__title">Letter-spacing · {FONT.label}</span>
+          <span class="brand__subtitle">ajuste e compare em tempo real</span>
+        </div>
+        <div class="actions">
+          <button type="button" id="theme-toggle" class="btn" aria-pressed="false">
+            Tema
+          </button>
+          <button type="button" id="reset" class="btn">Resetar</button>
+          <button type="button" id="copy" class="btn btn--accent">Copiar CSS</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="sidebar" aria-label="Controles">
+          <Controls />
+        </aside>
+        <section class="stage" id="stage" aria-label="Pré-visualização">
+          <Preview />
+        </section>
+      </main>
+    </div>
+
+    <script>
+      import { initPlayground } from "~/scripts/playground";
+      initPlayground();
+    </script>
+  </body>
+</html>
