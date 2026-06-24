@@ -20,3 +20,10 @@ pnpm-debug.log*
 Thumbs.db
 .vscode/*
 !.vscode/extensions.json
+
+# claude local settings
+.claude/settings.local.json
+
+# arquivo-fonte (vendor) da Geist — só o woff2 variável usado é copiado para
+# src/assets/fonts/. A pasta completa não precisa ir para o repositório.
+geist-font/

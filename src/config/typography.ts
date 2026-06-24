@@ -24,7 +24,7 @@ export interface FontMeta {
 
 export const FONT: FontMeta = {
   label: "Geist Mono",
-  cssFamily: '"Geist Mono Variable"',
+  cssFamily: '"Geist Mono"',
   fallback: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace",
   weight: { min: 100, max: 900 },
 };

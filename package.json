@@ -18,7 +18,6 @@
     "check": "astro check && biome check . && vitest run"
   },
   "dependencies": {
-    "@fontsource-variable/geist-mono": "^5.2.5",
     "astro": "^5.13.0"
   },
   "devDependencies": {
